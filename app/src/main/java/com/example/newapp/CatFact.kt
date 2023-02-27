@@ -1,5 +1,7 @@
 package com.example.newapp
 
 data class CatFact(
-    val data: List<String>
+    val title: String,
+    val fact: String,
+    val url: String
 )

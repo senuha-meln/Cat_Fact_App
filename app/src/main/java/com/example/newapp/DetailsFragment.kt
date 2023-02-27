@@ -28,8 +28,7 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.textView2.text = arguments?.getString("fact")
-        Glide.with(binding.imageView2.context).load("https://cataas.com/cat").diskCacheStrategy(
-            DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.imageView2)
+        Glide.with(binding.imageView2.context).load(arguments?.getString("url")).into(binding.imageView2)
     }
 
     override fun onDestroyView() {

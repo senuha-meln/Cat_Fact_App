@@ -29,40 +29,17 @@ class MainFragment : Fragment(), Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val list = mutableListOf<CatFact>()
+        val list = mutableListOf<CatFact>(
+            CatFact("Cats can't be evil", "Fact1", CatUrl.URL1.url),
+            CatFact("Cats are cute", "Fact2", CatUrl.URL2.url),
+            CatFact("Feed your cat, pls", "Fact3", CatUrl.URL3.url),
+            CatFact("I'm a cat","Fact4", CatUrl.URL4.url),
+        )
         val adapter = CatAdapter(list, this)
         val layout = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = layout
         binding.recyclerView.adapter = adapter
 
-
-
-        binding.button.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val fact = RetrofitInstance.retrofit.fact()
-                    list.add(fact)
-                    withContext(Dispatchers.Main) {
-                        adapter.notifyItemInserted(list.size - 1)
-                        delay(500L)
-                        try {
-                            layout.scrollToPosition(list.size - 1)
-                            delay(500L)
-                            binding.scrollView.post { binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
-                        } catch (e: Exception) {
-                        }
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Нема підключення до Інтернету",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            }
-        }
     }
 
     override fun onDestroyView() {
@@ -70,9 +47,10 @@ class MainFragment : Fragment(), Listener {
         _binding = null
     }
 
-    override fun onClick(data: String) {
+    override fun onClick(catFact: CatFact) {
         val bundle = Bundle()
-        bundle.putString("fact", data)
+        bundle.putString("fact", catFact.fact)
+        bundle.putString("url", catFact.url)
         Navigation.findNavController(this.requireView()).navigate(R.id.detailsFragment, bundle)
 
     }
@@ -80,5 +58,5 @@ class MainFragment : Fragment(), Listener {
 }
 
 interface Listener {
-    fun onClick(data: String)
+    fun onClick(catFact: CatFact)
 }

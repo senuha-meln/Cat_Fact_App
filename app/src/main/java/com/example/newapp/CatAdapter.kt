@@ -36,15 +36,13 @@ class CatAdapter(private val catList: List<CatFact>, private val listener: Liste
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val fact = catList[position]
-        holder.textView.text = fact.data.first()
+        holder.textView.text = fact.title
         holder.constraint.setOnClickListener() {
-            listener.onClick(fact.data.first())
+            listener.onClick(fact)
         }
         holder.imageView.visibility = View.VISIBLE
         holder.textView.visibility = View.VISIBLE
-        Glide.with(holder.imageView.context).load("https://cataas.com/cat").diskCacheStrategy(
-            DiskCacheStrategy.NONE
-        ).skipMemoryCache(true).into(holder.imageView)
+        Glide.with(holder.imageView.context).load(fact.url).into(holder.imageView)
     }
 
     override fun getItemCount(): Int {
